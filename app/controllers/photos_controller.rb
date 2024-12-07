@@ -40,9 +40,9 @@ class PhotosController < ApplicationController
     render :index 
   end
 
-  def discovery
-    # Retrieves photos liked by users this user is following
-    @photos = current_user.discovery_photos
-    render :index  
+  def feed
+    @photos = current_user.feed_photos
+    render :index
   end
+
 end

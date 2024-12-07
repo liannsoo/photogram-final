@@ -1,19 +1,31 @@
 class FollowRequestsController < ApplicationController
   def create
-    @follow_request = current_user.sent_follow_requests.build(recipient_id: params[:recipient_id])
-    if @follow_request.save
-    redirect_back fallback_location: root_path, notice: 'Follow request sent.'
+    recipient = User.find(params[:follow_request][:recipient_id])
+    follow_request = current_user.sent_follow_requests.build(recipient: recipient)
+    follow_request.status = recipient.private? ? 'pending' : 'accepted'
+
+    if follow_request.save
+      redirect_to users_path, notice: 'Follow request sent!'
     else
-    redirect_back fallback_location: root_path, alert: 'Could not send follow request.'
+      redirect_to users_path, alert: 'Failed to send follow request.'
     end
   end
 
-  def update
+  def destroy
+    follow_request = FollowRequest.find_by(sender: current_user, recipient_id: params[:id])
+    if follow_request&.destroy
+      redirect_to users_path, notice: 'Unfollowed successfully.'
+    else
+      redirect_to users_path, alert: 'Failed to unfollow.'
+    end
   end
 
-  def destroy
-    @follow_request = FollowRequest.find(params[:id])
-    @follow_request.destroy
-    redirect_back fallback_location: root_path, notice: 'Follow request cancelled.'
+  def cancel
+    follow_request = FollowRequest.find_by(sender: current_user, recipient_id: params[:id], status: 'pending')
+    if follow_request&.destroy
+      redirect_to users_path, notice: 'Follow request canceled.'
+    else
+      redirect_to users_path, alert: 'Failed to cancel follow request.'
+    end
   end
 end

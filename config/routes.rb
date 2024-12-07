@@ -1,11 +1,16 @@
 Rails.application.routes.draw do
-  
   devise_for :users
 
   root "users#index"
 
   # Resource routes for FollowRequests
-  resources :follow_requests
+  resources :follow_requests, only: [:create, :destroy] do
+    collection do
+      post 'follow', to: 'follow_requests#create', as: 'follow'
+      delete 'unfollow/:id', to: 'follow_requests#destroy', as: 'unfollow'
+      delete 'cancel/:id', to: 'follow_requests#cancel', as: 'cancel_request'
+    end
+  end
 
   # Routes for the Photo resource with nested routes for comments
   resources :photos do

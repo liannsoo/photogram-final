@@ -1,2 +1,62 @@
-<h1>Users#show</h1>
-<p>Find me in app/views/users/show.html.erb</p>
+<h1><%= @user.username %></h1>
+
+<div class="user-info">
+  <p><strong>Private:</strong> <%= @user.private ? 'true' : 'false' %></p>
+  <p><strong>Followers:</strong> <%= @user.received_follow_requests.where(status: 'accepted').count %></p>
+  <p><strong>Following:</strong> <%= @user.sent_follow_requests.where(status: 'accepted').count %></p>
+  
+  <% if user_signed_in? && current_user != @user %>
+    <% case @follow_statuses[@user.id] %>
+    <% when 'accepted' %>
+      <%= link_to 'Unfollow', unfollow_follow_requests_path(id: @user.id), method: :delete, class: 'btn btn-danger' %>
+    <% when 'pending' %>
+      <%= link_to 'Cancel Request', cancel_request_follow_requests_path(id: @user.id), method: :delete, class: 'btn btn-warning' %>
+    <% else %>
+      <%= link_to 'Follow', follow_follow_requests_path(follow_request: { recipient_id: @user.id }), method: :post, class: 'btn btn-primary' %>
+    <% end %>
+  <% end %>
+</div>
+
+<hr>
+
+<ul>
+  <li><%= link_to 'Profile', user_path(@user) %></li>
+  <li><%= link_to 'Liked photos', my_likes_photos_path %></li>
+  <li><%= link_to 'Feed', my_timeline_photos_path %></li>
+  <li><%= link_to 'Discover', photos_path %></li>
+</ul>
+
+<hr>
+
+<h2>Own Photos (<%= @user.photos.count %>)</h2>
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>Image</th>
+      <th>Owner</th>
+      <th>Caption</th>
+      <th>Posted</th>
+      <th>Likes</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @user.photos.each do |photo| %>
+      <tr>
+        <td>
+          <% if photo.image.present? %>
+            <%= image_tag photo.image.url, alt: photo.caption, width: 100, height: 100 %>
+          <% else %>
+            No Image
+          <% end %>
+        </td>
+        <td><%= photo.owner.username %></td>
+        <td><%= photo.caption %></td>
+        <td><%= time_ago_in_words(photo.created_at) %> ago</td>
+        <td><%= photo.likes.count %></td>
+        <td><%= link_to 'Show details', photo_path(photo), class: 'btn btn-secondary' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

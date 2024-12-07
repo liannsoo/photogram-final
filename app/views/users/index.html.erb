@@ -17,11 +17,11 @@
           <% if user_signed_in? && user != current_user %>
             <% case @follow_statuses[user.id] %>
             <% when 'accepted' %>
-              <%= link_to 'Unfollow', unfollow_path(user), method: :delete %>
+              <%= button_to 'Unfollow', unfollow_follow_requests_path(id: user.id), method: :delete, class: 'btn btn-danger' %>
             <% when 'pending' %>
-              <%= link_to 'Cancel Request', cancel_request_path(user), method: :delete %>
+              <%= button_to 'Cancel Request', cancel_request_follow_requests_path(id: user.id), method: :delete, class: 'btn btn-warning' %>
             <% else %>
-              <%= link_to 'Follow', follow_path(user), method: :post %>
+              <%= button_to 'Follow', follow_follow_requests_path(follow_request: { recipient_id: user.id }), method: :post, class: 'btn btn-primary' %>
             <% end %>
           <% end %>
         </td>

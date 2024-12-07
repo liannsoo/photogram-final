@@ -3,6 +3,12 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    if user_signed_in?
+      @follow_statuses = current_user.sent_follow_requests.includes(:recipient)
+                                     .map { |fr| [fr.recipient_id, fr.status] }.to_h
+    else
+      @follow_statuses = {}
+    end
   end
 
   def index
@@ -16,7 +22,8 @@ class UsersController < ApplicationController
   end
 
   def feed_photos
-    Photo.joins(:owner => :received_follow_requests)
+    Photo.joins(owner: :received_follow_requests)
          .where(follow_requests: { sender_id: id, status: 'accepted' })
+         .order(created_at: :desc)
   end
 end
