@@ -30,6 +30,20 @@ class PhotosController < ApplicationController
   def destroy
   end
 
+  def like
+    @photo = Photo.find(params[:id])
+    @photo.likes.create(user: current_user)
+    flash[:notice] = "Photo liked successfully."
+    redirect_to photos_path
+  end
+  
+  def unlike
+    @photo = Photo.find(params[:id])
+    @photo.likes.find_by(user: current_user)&.destroy
+    flash[:alert] = "Photo unliked successfully."
+    redirect_to photos_path
+  end
+
   def photo_params
     params.require(:photo).permit(:caption, :image)  
   end
