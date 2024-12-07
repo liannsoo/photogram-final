@@ -1,2 +1,32 @@
-<h1>Users#index</h1>
-<p>Find me in app/views/users/index.html.erb</p>
+<h1>List of Users</h1>
+
+<table border='1'>
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>Private?</th>
+      <th colspan="2">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.username %></td>
+        <td><%= user.private ? 'Yes' : 'No' %></td>
+        <td>
+          <% if user_signed_in? && user != current_user %>
+            <% case @follow_statuses[user.id] %>
+            <% when 'accepted' %>
+              <%= link_to 'Unfollow', unfollow_path(user), method: :delete %>
+            <% when 'pending' %>
+              <%= link_to 'Cancel Request', cancel_request_path(user), method: :delete %>
+            <% else %>
+              <%= link_to 'Follow', follow_path(user), method: :post %>
+            <% end %>
+          <% end %>
+        </td>
+        <td><%= link_to 'Show details', user_path(user) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

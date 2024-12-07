@@ -18,6 +18,8 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Photo < ApplicationRecord
+  mount_uploader :image, ImageUploader
+
   belongs_to :user
   has_one_attached :image
   has_many :comments, dependent: :destroy

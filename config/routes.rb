@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   
   devise_for :users
 
-  root "photos#index"
+  root "users#index"
 
   # Resource routes for FollowRequests
   resources :follow_requests

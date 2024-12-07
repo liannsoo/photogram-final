@@ -31,18 +31,18 @@ class PhotosController < ApplicationController
   end
 
   def photo_params
-    params.require(:photo).permit(:caption, :image)  # Include other fields as needed
+    params.require(:photo).permit(:caption, :image)  
   end
 
   def feed
     # Retrieves all photos from users this user is following
     @photos = current_user.feed_photos
-    render :index  # You can reuse the index view or create a specific feed view if needed
+    render :index 
   end
 
   def discovery
     # Retrieves photos liked by users this user is following
     @photos = current_user.discovery_photos
-    render :index  # Reuse the index view or create a specific discovery view
+    render :index  
   end
 end
