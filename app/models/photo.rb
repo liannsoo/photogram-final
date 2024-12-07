@@ -18,10 +18,11 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Photo < ApplicationRecord
-  belongs_to :owner, class_name: "User", foreign_key: "owner_id"
+  belongs_to :user
+  has_one_attached :image
   has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
 
-  validates :owner, presence: true
+  validates :user, presence: true
   validates :image, presence: true
 end

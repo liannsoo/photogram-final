@@ -1,2 +1,14 @@
-<h1>Photos#index</h1>
-<p>Find me in app/views/photos/index.html.erb</p>
+<h1>All Photos</h1>
+
+<div class="photo-grid">
+  <% @photos.each do |photo| %>
+    <div class="photo-card">
+      <%= image_tag(photo.image.url, alt: photo.caption) if photo.image.attached? %>
+      <h3><%= photo.caption %></h3>
+      <p>Posted by: <%= link_to photo.owner.username, user_path(photo.owner) %></p>
+      <p>Posted: <%= time_ago_in_words(photo.created_at) %> ago</p>
+      <p>Likes: <%= photo.likes.count %></p>
+      <%= link_to 'Show details', photo_path(photo), class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>
