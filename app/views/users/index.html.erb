@@ -29,10 +29,10 @@
                   <%= link_to 'Cancel', cancel_request_follow_requests_path(id: user.id), method: :delete, class: 'btn btn-link', data: { turbo: false } %>
                 </div>
               <% else %>
-                <%= button_to 'Follow', follow_follow_requests_path(follow_request: { recipient_id: user.id }), method: :post, class: 'btn btn-primary' %>
+                <%= button_to 'Follow', e(follow_request: { recipient_id: user.id }), method: :post, class: 'btn btn-primary' %>
               <% end %>
             <% else %>
-              <%= button_to 'Follow', user_path(user), class: 'btn btn-primary' %>
+              <%= button_to 'Follow', user_path(user), method: :post, class: 'btn btn-primary' %>
             <% end %>
           </td>
         <% end %>

@@ -26,6 +26,9 @@ Rails.application.routes.draw do
       get 'liked_photos', to: 'photos#liked_photos'
       get 'feed', to: 'photos#feed'
       get 'discover', to: 'photos#discover'
+      post 'follow', to: 'follow_requests#create'
+      delete 'unfollow', to: 'follow_requests#destroy'
+      delete 'cancel_follow', to: 'follow_requests#cancel'
     end
   end
 
