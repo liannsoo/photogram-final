@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html>
-<head><title>Photo Details</title></head>
+<head>
+  <title>Photo Details</title>
+</head>
 <body>
   <div class="photo-details">
-    <img src="<%= @photo.image_url %>" alt="<%= @photo.caption %>">
+    <% if @photo.image.present? %>
+      <%= image_tag(@photo.image, alt: @photo.caption) %>
+    <% end %>
+
     <dl>
       <dt>Caption</dt>
       <dd><%= @photo.caption %></dd>
@@ -22,47 +27,56 @@
 
       <dt>Fans</dt>
       <dd><%= @photo.fans.map(&:username).join(', ') %></dd>
-
-      <dt>Add a fan</dt>
-      <dd>
-        <% if user_signed_in? && @photo.owner == current_user %>
-          <% if @photo.likes.exists?(fan_id: current_user.id) %>
-            <%= button_to 'Unlike', unlike_photo_path(@photo), method: :delete, class: "btn btn-warning" %>
-          <% else %>
-            <%= button_to 'Like', like_photo_path(@photo), method: :post, class: "btn btn-success" %>
-          <% end %>
-          <%= link_to 'Edit photo', edit_photo_path(@photo), method: :get, class: "btn btn-info" %>
-          <%= link_to 'Delete this photo', photo_path(@photo), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %>
-        <% end %>
-      </dd>
     </dl>
+
+    <% if user_signed_in? %>
+      <h3>Actions</h3>
+      <% if @photo.likes.exists?(fan_id: current_user.id) %>
+        <%= button_to 'Unlike', unlike_photo_path(@photo), method: :delete, class: "btn btn-warning" %>
+      <% else %>
+        <%= button_to 'Like', like_photo_path(@photo), method: :post, class: "btn btn-success" %>
+      <% end %>
+      
+      <% if @photo.owner == current_user %>
+        <%= link_to 'Edit photo', edit_photo_path(@photo), class: "btn btn-info" %>
+        <%= link_to 'Delete this photo', photo_path(@photo), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %>
+      <% end %>
+    <% end %>
   </div>
 
   <h2>Comments</h2>
   <table>
-    <tr>
-      <th>Commenter</th>
-      <th>Comment</th>
-      <th>Posted</th>
-    </tr>
-    <% @photo.comments.each do |comment| %>
+    <thead>
       <tr>
-        <td><%= comment.author.username %></td>
-        <td><%= comment.body %></td>
-        <td><%= time_ago_in_words(comment.created_at) %> ago</td>
+        <th>Commenter</th>
+        <th>Comment</th>
+        <th>Posted</th>
       </tr>
-    <% end %>
+    </thead>
+    <tbody>
+      <% @photo.comments.each do |comment| %>
+        <tr>
+          <td><%= comment.author.username %></td>
+          <td><%= comment.body %></td>
+          <td><%= time_ago_in_words(comment.created_at) %> ago</td>
+        </tr>
+      <% end %>
+    </tbody>
   </table>
 
-  <h3>Add a new comment</h3>
-  <%= form_with(model: [ @photo, Comment.new ], local: true) do |form| %>
-  <div>
-    <%= form.label :body, "Comment" %>
-    <%= form.text_area :body, placeholder: "Enter your comment" %>
-  </div>
-  <div>
-    <%= form.submit "Add Comment" %>
-  </div>
-<% end %>
+  <% if user_signed_in? %>
+    <h3>Add a New Comment</h3>
+    <%= form_with(model: [@photo, Comment.new], local: true) do |form| %>
+      <div>
+        <%= form.label :body, "Comment" %>
+        <%= form.text_area :body, placeholder: "Enter your comment" %>
+      </div>
+      <div>
+        <%= form.submit "Add Comment", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  <% else %>
+    <p>You must be signed in to add a comment.</p>
+  <% end %>
 </body>
 </html>

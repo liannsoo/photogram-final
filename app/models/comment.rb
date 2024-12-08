@@ -23,7 +23,7 @@
 #
 class Comment < ApplicationRecord
   belongs_to :author, class_name: "User", foreign_key: "author_id"
-  belongs_to :photo
+  belongs_to :photo, counter_cache: true
 
   validates :body, presence: true
   validates :author, presence: true

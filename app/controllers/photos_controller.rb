@@ -55,8 +55,7 @@ class PhotosController < ApplicationController
 
   def feed
     # Retrieves all photos from users this user is following
-    @photos = current_user.feed_photos
-    render :index 
+    @photos = Photo.where(user_id: current_user.following_ids).order(created_at: :desc)
   end
 
   def my_timeline

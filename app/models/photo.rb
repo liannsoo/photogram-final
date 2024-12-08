@@ -2,13 +2,14 @@
 #
 # Table name: photos
 #
-#  id          :bigint           not null, primary key
-#  caption     :text
-#  image       :string
-#  likes_count :integer
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  user_id     :bigint
+#  id             :bigint           not null, primary key
+#  caption        :text
+#  comments_count :integer          default(0), not null
+#  image          :string
+#  likes_count    :integer
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  user_id        :bigint
 #
 # Indexes
 #
@@ -19,8 +20,7 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Photo < ApplicationRecord
-  mount_uploader :image, ImageUploader
-
+  alias_attribute :owner_id, :user_id
   belongs_to :owner, class_name: "User", foreign_key: "user_id"
   has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
