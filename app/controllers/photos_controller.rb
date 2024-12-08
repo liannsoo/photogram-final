@@ -9,31 +9,31 @@ class PhotosController < ApplicationController
   def show
     @user = User.find(params[:id])
     @show_section = params[:show_section] || 'own'
-
+    
     case @show_section
     when 'liked'
-      @photos = @user.liked_photos
+      @photos = @user.liked_photos.to_a
       @section_title = 'Liked Photos'
     when 'feed'
-      @photos = Photo.where(owner_id: @user.following.pluck(:id))
+      @photos = Photo.where(owner_id: @user.following.pluck(:id)).to_a
       @section_title = 'Feed'
     when 'discover'
       followed_users_ids = @user.following.pluck(:id)
-      @photos = Photo.joins(:likes).where(likes: { user_id: followed_users_ids }).distinct
+      @photos = Photo.joins(:likes).where(likes: { user_id: followed_users_ids }).distinct.to_a
       @section_title = 'Discover'
     else
-      @photos = @user.photos
+      @photos = @user.photos.to_a
       @section_title = 'Own Photos'
     end
-    @photos = @photos.to_a
+  
     render 'show'
   end
 
 
   def set_user
-    @user = User.find(params[:id])
+    @user = User.find_by(id: params[:id])
+    redirect_to users_path, alert: 'User not found.' if @user.nil?
   end
-
 
   def create
     @photo = current_user.photos.build(photo_params)
@@ -77,23 +77,31 @@ class PhotosController < ApplicationController
 
   def liked_photos
     @photos = @user.liked_photos
-    render 'users/show' 
+    @section_title = "Liked Photos" # Added for clarity in the view
+    render 'users/show'  # Assumes that 'users/show' is prepared to handle this context
+  end
+
+  def feed
+    @user = User.find(params[:id])
+    following_ids = @user.following.pluck(:id)
+    @photos = Photo.where(owner_id: following_ids).order(created_at: :desc)
+    @section_title = "Feed"
+    render 'users/show'
   end
 
   def discover
     followed_users_ids = @user.following.pluck(:id)
-    @photos = Photo.joins(:likes).where(likes: { user_id: followed_users_ids }).distinct
+    @photos = Photo.joins(:likes)
+                   .where(likes: { user_id: followed_users_ids })
+                   .distinct
+    @section_title = "Discovery"  # Optionally, set a title for display purposes
+  
     render 'users/show'
   end
 
   def my_timeline
     @photos = Photo.where(user_id: current_user.following_ids).order(created_at: :desc)
     render :index 
-  end
-
-  def liked_photos
-    @user = User.find(params[:user_id])
-    @photos = @user.liked_photos # assuming `liked_photos` association exists
   end
 
 end

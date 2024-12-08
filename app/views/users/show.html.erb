@@ -39,29 +39,33 @@
 
 <hr>
 
-<h2><%= @section_title %> (<%= @photos&.count || 0 %>)</h2>
+<h2><%= @section_title %> Photos (<%= @photos&.count || 0 %>)</h2>
 
-<table border="1">
-  <thead>
-    <tr>
-      <th>Image</th>
-      <th>Owner</th>
-      <th>Caption</th>
-      <th>Posted</th>
-      <th>Likes</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @photos.each do |photo| %>
+<% if @photos.blank? %>
+  <p>No photos to display.</p>
+<% else %>
+  <table border="1">
+    <thead>
       <tr>
-        <td><%= image_tag photo.image.url, alt: photo.caption, width: 100, height: 100 if photo.image.present? %></td>
-        <td><%= photo.owner.username %></td>
-        <td><%= photo.caption %></td>
-        <td><%= time_ago_in_words(photo.created_at) %> ago</td>
-        <td><%= photo.likes.count %></td>
-        <td><%= link_to 'Show details', photo_path(photo), class: 'btn btn-secondary' %></td>
+        <th>Image</th>
+        <th>Owner</th>
+        <th>Caption</th>
+        <th>Posted</th>
+        <th>Likes</th>
+        <th>Actions</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @photos.each do |photo| %>
+        <tr>
+          <td><%= image_tag photo.image.url, alt: photo.caption, width: 100, height: 100 if photo.image.present? %></td>
+          <td><%= photo.owner.username %></td>
+          <td><%= photo.caption %></td>
+          <td><%= time_ago_in_words(photo.created_at) %> ago</td>
+          <td><%= photo.likes.count %></td>
+          <td><%= link_to 'Show details', photo_path(photo), class: 'btn btn-secondary' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
