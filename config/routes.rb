@@ -13,20 +13,22 @@ Rails.application.routes.draw do
   delete '/follow_requests/:id/reject', to: 'follow_requests#reject', as: :reject_follow_request
 
   # Routes for the Photo resource with nested routes for comments
-  resources :photos do
-    resources :comments, only: [:create, :destroy]
+  resources :photos, only: [:show, :create, :update, :destroy] do
     member do
-      post 'like'
-      delete 'unlike'
+      post :like
+      delete :unlike
     end
-    get 'my_likes', on: :collection
-    get 'my_timeline', on: :collection
   end
 
   # Resource routes for Users
-  resources :users, only: [:index, :show]
+  resources :users, only: [:index, :show] do
+    member do
+      get 'liked_photos', to: 'photos#liked_photos'
+      get 'feed', to: 'photos#feed'
+      get 'discover', to: 'photos#discover'
+    end
+  end
 
   # Resource routes for Likes
   resources :likes, except: [:new, :edit] # Assuming new and edit are not used
-
 end

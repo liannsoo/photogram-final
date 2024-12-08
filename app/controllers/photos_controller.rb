@@ -1,4 +1,5 @@
 class PhotosController < ApplicationController
+  before_action :set_user, only: [:liked_photos, :feed, :discover]
   skip_before_action(:authenticate_user!, { :only => [:index] })
 
   def index
@@ -6,12 +7,33 @@ class PhotosController < ApplicationController
   end
 
   def show
-    @photo = Photo.find(params[:id])
-    @comments = @photo.comments
+    @user = User.find(params[:id])
+    @show_section = params[:show_section] || 'own'
+
+    case @show_section
+    when 'liked'
+      @photos = @user.liked_photos
+      @section_title = 'Liked Photos'
+    when 'feed'
+      @photos = Photo.where(owner_id: @user.following.pluck(:id))
+      @section_title = 'Feed'
+    when 'discover'
+      followed_users_ids = @user.following.pluck(:id)
+      @photos = Photo.joins(:likes).where(likes: { user_id: followed_users_ids }).distinct
+      @section_title = 'Discover'
+    else
+      @photos = @user.photos
+      @section_title = 'Own Photos'
+    end
+    @photos = @photos.to_a
+    render 'show'
   end
 
-  def new
+
+  def set_user
+    @user = User.find(params[:id])
   end
+
 
   def create
     @photo = current_user.photos.build(photo_params)
@@ -53,15 +75,25 @@ class PhotosController < ApplicationController
     params.require(:photo).permit(:caption, :image)  
   end
 
-  def feed
-    # Retrieves all photos from users this user is following
-    @photos = Photo.where(user_id: current_user.following_ids).order(created_at: :desc)
+  def liked_photos
+    @photos = @user.liked_photos
+    render 'users/show' 
+  end
+
+  def discover
+    followed_users_ids = @user.following.pluck(:id)
+    @photos = Photo.joins(:likes).where(likes: { user_id: followed_users_ids }).distinct
+    render 'users/show'
   end
 
   def my_timeline
     @photos = Photo.where(user_id: current_user.following_ids).order(created_at: :desc)
-    render :index  # or render a specific view for 'my_timeline' if you have one
+    render :index 
   end
 
+  def liked_photos
+    @user = User.find(params[:user_id])
+    @photos = @user.liked_photos # assuming `liked_photos` association exists
+  end
 
 end
