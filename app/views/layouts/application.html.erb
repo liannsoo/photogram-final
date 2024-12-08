@@ -16,7 +16,7 @@
         <% if user_signed_in? %>
           <!-- Links visible only when user is signed in -->
           <li><%= link_to current_user.username, edit_user_registration_path %></li>
-          <li><%= button_to 'Sign out', destroy_user_session_path, method: :delete, data: { turbo: false } %></li>
+          <li><%= link_to 'Sign out', destroy_user_session_path, method: :delete, data: { turbo: false } %></li>
         <% else %>
           <!-- Links visible only when no user is signed in -->
           <li><%= link_to 'Sign in', new_user_session_path %></li>
