@@ -27,8 +27,9 @@ module RailsTemplate
       g.helper false
     end
 
-    config.action_controller.default_protect_from_forgery = false
+    #config.action_controller.default_protect_from_forgery = false
     config.active_record.belongs_to_required_by_default = false
     config.generators.system_tests = nil
+    config.eager_load_paths << Rails.root.join("app/uploaders")
   end
 end
