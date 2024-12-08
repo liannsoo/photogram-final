@@ -8,10 +8,17 @@ Rails.application.routes.draw do
   delete '/follow_requests/unfollow/:id', to: 'follow_requests#destroy', as: :unfollow_follow_requests
   delete '/follow_requests/cancel/:id', to: 'follow_requests#cancel', as: :cancel_request_follow_requests
 
+  # Add routes for accepting and rejecting follow requests
+  patch '/follow_requests/:id/accept', to: 'follow_requests#accept', as: :accept_follow_request
+  delete '/follow_requests/:id/reject', to: 'follow_requests#reject', as: :reject_follow_request
 
   # Routes for the Photo resource with nested routes for comments
   resources :photos do
     resources :comments, only: [:create, :destroy]
+    member do
+      post 'like'
+      delete 'unlike'
+    end
     get 'my_likes', on: :collection
     get 'my_timeline', on: :collection
   end

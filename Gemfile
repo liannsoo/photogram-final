@@ -84,7 +84,7 @@ gem "http"
 gem "sqlite3", "~> 1.4"
 gem "table_print"
 gem "simple_form"
-gem "carrierwave"
+gem "carrierwave", '~> 2.0'
 gem "cloudinary"
 gem 'activerecord-session_store'
 

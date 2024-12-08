@@ -1,2 +1,65 @@
-<h1>Photos#show</h1>
-<p>Find me in app/views/photos/show.html.erb</p>
+<!DOCTYPE html>
+<html>
+<head><title>Photo Details</title></head>
+<body>
+  <div class="photo-details">
+    <img src="<%= @photo.image_url %>" alt="<%= @photo.caption %>">
+    <dl>
+      <dt>Caption</dt>
+      <dd><%= @photo.caption %></dd>
+
+      <dt>Owner</dt>
+      <dd><%= link_to @photo.owner.username, user_path(@photo.owner) %></dd>
+
+      <dt>Posted</dt>
+      <dd><%= time_ago_in_words(@photo.created_at) %> ago</dd>
+
+      <dt>Likes count</dt>
+      <dd><%= @photo.likes.count %></dd>
+
+      <dt>Comments count</dt>
+      <dd><%= @photo.comments.count %></dd>
+
+      <dt>Fans</dt>
+      <dd><%= @photo.fans.map(&:username).join(', ') %></dd>
+
+      <dt>Add a fan</dt>
+      <dd>
+        <% if user_signed_in? && @photo.owner == current_user %>
+          <% if @photo.likes.exists?(fan_id: current_user.id) %>
+            <%= button_to 'Unlike', unlike_photo_path(@photo), method: :delete, class: "btn btn-warning" %>
+          <% else %>
+            <%= button_to 'Like', like_photo_path(@photo), method: :post, class: "btn btn-success" %>
+          <% end %>
+          <%= link_to 'Edit photo', edit_photo_path(@photo), method: :get, class: "btn btn-info" %>
+          <%= link_to 'Delete this photo', photo_path(@photo), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %>
+        <% end %>
+      </dd>
+    </dl>
+  </div>
+
+  <h2>Comments</h2>
+  <table>
+    <tr>
+      <th>Commenter</th>
+      <th>Comment</th>
+      <th>Posted</th>
+    </tr>
+    <% @photo.comments.each do |comment| %>
+      <tr>
+        <td><%= comment.author.username %></td>
+        <td><%= comment.body %></td>
+        <td><%= time_ago_in_words(comment.created_at) %> ago</td>
+      </tr>
+    <% end %>
+  </table>
+
+  <h3>Add a new comment</h3>
+  <form action="/insert_comment" method="post">
+    <input type="hidden" value="<%= @photo.id %>" name="query_photo_id">
+    <label for="browser_comment">Comment</label>
+    <textarea id="browser_comment" name="query_body" placeholder="Enter a comment..."></textarea>
+    <button>Add comment</button>
+  </form>
+</body>
+</html>

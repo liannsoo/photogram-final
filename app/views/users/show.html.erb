@@ -3,6 +3,18 @@
 <div class="user-info">
   <p><strong>Private:</strong> <%= @user.private ? 'true' : 'false' %></p>
   <p><strong>Followers:</strong> <%= @user.received_follow_requests.where(status: 'accepted').count %></p>
+
+  <% if @user == current_user %>
+  <p><strong>Pending Follow Requests</strong></p>
+  <% @user.received_follow_requests.where(status: 'pending').each do |request| %>
+    <p>
+      <%= request.sender.username %>
+      <%= button_to 'Accept', accept_follow_request_path(request), method: :patch, class: 'btn btn-success' %>
+      <%= button_to 'Reject', reject_follow_request_path(request), method: :delete, class: 'btn btn-danger' %>
+    </p>
+  <% end %>
+<% end %>
+
   <p><strong>Following:</strong> <%= @user.sent_follow_requests.where(status: 'accepted').count %></p>
   
   <% if user_signed_in? && current_user != @user %>

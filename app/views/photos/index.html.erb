@@ -1,5 +1,17 @@
 <h1>List of Photos</h1>
 
+<% if user_signed_in? %>
+  <%= form_for :photo, url: photos_path, html: { multipart: true } do |f| %>
+    <table>
+      <tr>
+        <td><%= f.label :image, 'Image' %><br><%= f.file_field :image %></td>
+        <td><%= f.label :caption, 'Caption' %><br><%= f.text_field :caption, placeholder: 'Enter a caption for the photo' %></td>
+        <td><%= f.submit 'Add Photo' %></td>
+      </tr>
+    </table>
+  <% end %>
+<% end %>
+
 <table class="table photo-grid" border="1">
   <thead>
     <tr>
@@ -21,7 +33,8 @@
         <td><%= link_to photo.owner.username, user_path(photo.owner) %></td>
         <td><%= time_ago_in_words(photo.created_at) %> ago</td>
         <td><%= photo.likes.count %></td>
-        <td><%= link_to 'Show details', photo_path(photo), class: "btn btn-primary" %></td>
+        <td><%= link_to 'Show details', photo_path(photo), class: "btn btn-primary" %>
+      </td>
       </tr>
     <% end %>
   </tbody>

@@ -4,6 +4,7 @@
 #
 #  id          :bigint           not null, primary key
 #  caption     :text
+#  image       :string
 #  likes_count :integer
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
@@ -23,7 +24,7 @@ class Photo < ApplicationRecord
 
   has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
-
-  validates :user, presence: true
+  has_many :fans, through: :likes, source: :fan 
+  validates :owner, presence: true
   validates :image, presence: true
 end

@@ -5,16 +5,19 @@
 #  id         :bigint           not null, primary key
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  fan_id     :integer
 #  photo_id   :bigint
 #  user_id    :bigint
 #
 # Indexes
 #
+#  index_likes_on_fan_id    (fan_id)
 #  index_likes_on_photo_id  (photo_id)
 #  index_likes_on_user_id   (user_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (fan_id => users.id)
 #  fk_rails_...  (photo_id => photos.id)
 #  fk_rails_...  (user_id => users.id)
 #

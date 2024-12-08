@@ -32,16 +32,30 @@ class PhotosController < ApplicationController
 
   def like
     @photo = Photo.find(params[:id])
-    @photo.likes.create(user: current_user)
-    flash[:notice] = "Photo liked successfully."
-    redirect_to photos_path
+    # Correctly use 'fan_id' if your Like model has a 'fan' relationship with the User
+    new_like = @photo.likes.create(fan_id: current_user.id)
+  
+    if new_like.persisted?
+      flash[:notice] = "Photo liked successfully."
+    else
+      flash[:alert] = "Failed to like the photo."
+    end
+  
+    # Redirect back to the same photo's detail page
+    redirect_to photo_path(@photo)
   end
   
   def unlike
     @photo = Photo.find(params[:id])
-    @photo.likes.find_by(user: current_user)&.destroy
-    flash[:alert] = "Photo unliked successfully."
-    redirect_to photos_path
+    like = @photo.likes.find_by(fan_id: current_user.id)
+  
+    if like&.destroy
+      flash[:notice] = "Like removed."
+    else
+      flash[:alert] = "Failed to remove like."
+    end
+  
+    redirect_to photo_path(@photo)
   end
 
   def photo_params
@@ -54,9 +68,10 @@ class PhotosController < ApplicationController
     render :index 
   end
 
-  def feed
-    @photos = current_user.feed_photos
-    render :index
+  def my_timeline
+    @photos = Photo.where(user_id: current_user.following_ids).order(created_at: :desc)
+    render :index  # or render a specific view for 'my_timeline' if you have one
   end
+
 
 end
