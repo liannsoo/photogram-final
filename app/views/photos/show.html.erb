@@ -55,11 +55,14 @@
   </table>
 
   <h3>Add a new comment</h3>
-  <form action="/insert_comment" method="post">
-    <input type="hidden" value="<%= @photo.id %>" name="query_photo_id">
-    <label for="browser_comment">Comment</label>
-    <textarea id="browser_comment" name="query_body" placeholder="Enter a comment..."></textarea>
-    <button>Add comment</button>
-  </form>
+  <%= form_with(model: [ @photo, Comment.new ], local: true) do |form| %>
+  <div>
+    <%= form.label :body, "Comment" %>
+    <%= form.text_area :body, placeholder: "Enter your comment" %>
+  </div>
+  <div>
+    <%= form.submit "Add Comment" %>
+  </div>
+<% end %>
 </body>
 </html>

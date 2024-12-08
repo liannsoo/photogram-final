@@ -29,7 +29,4 @@ Rails.application.routes.draw do
   # Resource routes for Likes
   resources :likes, except: [:new, :edit] # Assuming new and edit are not used
 
-  # Resource routes for Comments
-  resources :comments, except: [:new, :edit] # Assuming new and edit are not used
-
 end

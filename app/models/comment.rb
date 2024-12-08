@@ -6,13 +6,15 @@
 #  body       :text
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  author_id  :integer
 #  photo_id   :bigint
 #  user_id    :bigint
 #
 # Indexes
 #
-#  index_comments_on_photo_id  (photo_id)
-#  index_comments_on_user_id   (user_id)
+#  index_comments_on_author_id  (author_id)
+#  index_comments_on_photo_id   (photo_id)
+#  index_comments_on_user_id    (user_id)
 #
 # Foreign Keys
 #

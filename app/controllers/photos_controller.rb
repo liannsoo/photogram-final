@@ -7,6 +7,7 @@ class PhotosController < ApplicationController
 
   def show
     @photo = Photo.find(params[:id])
+    @comments = @photo.comments
   end
 
   def new
@@ -15,8 +16,10 @@ class PhotosController < ApplicationController
   def create
     @photo = current_user.photos.build(photo_params)
     if @photo.save
-      redirect_to photos_path, notice: 'Photo was successfully created.'
+      flash[:notice] = 'Photo added successfully.'
+      redirect_to photos_path
     else
+      flash[:alert] = 'Failed to add photo.'
       render :new
     end
   end
@@ -34,26 +37,14 @@ class PhotosController < ApplicationController
     @photo = Photo.find(params[:id])
     # Correctly use 'fan_id' if your Like model has a 'fan' relationship with the User
     new_like = @photo.likes.create(fan_id: current_user.id)
-  
-    if new_like.persisted?
-      flash[:notice] = "Photo liked successfully."
-    else
-      flash[:alert] = "Failed to like the photo."
-    end
-  
-    # Redirect back to the same photo's detail page
+    flash[:notice] = 'You liked this photo.'
     redirect_to photo_path(@photo)
   end
   
   def unlike
     @photo = Photo.find(params[:id])
-    like = @photo.likes.find_by(fan_id: current_user.id)
-  
-    if like&.destroy
-      flash[:notice] = "Like removed."
-    else
-      flash[:alert] = "Failed to remove like."
-    end
+    @photo.likes.where(fan_id: current_user.id).destroy_all
+    flash[:alert] = 'You unliked this photo.'
   
     redirect_to photo_path(@photo)
   end

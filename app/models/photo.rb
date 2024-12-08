@@ -19,9 +19,9 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Photo < ApplicationRecord
-  belongs_to :owner, class_name: "User", foreign_key: "user_id"
   mount_uploader :image, ImageUploader
 
+  belongs_to :owner, class_name: "User", foreign_key: "user_id"
   has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :fans, through: :likes, source: :fan 
