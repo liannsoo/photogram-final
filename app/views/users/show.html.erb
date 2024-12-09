@@ -32,14 +32,14 @@
 
 <ul>
   <li><%= link_to 'Profile', user_path(@user) %></li>
-  <li><%= link_to 'Liked Photos', liked_photos_user_path(@user) %></li>
-  <li><%= link_to 'Feed', feed_user_path(@user) %></li>
-  <li><%= link_to 'Discover', discover_user_path(@user) %></li>
+  <li><%= link_to 'Liked Photos', user_path(@user, show_section: 'liked_photos') %></li>
+  <li><%= link_to 'Feed', user_path(@user, show_section: 'feed') %></li>
+  <li><%= link_to 'Discover', user_path(@user, show_section: 'discover') %></li>
 </ul>
 
 <hr>
 
-<h2><%= @section_title %> Photos (<%= @photos&.count || 0 %>)</h2>
+<h2><%= @show_section.capitalize %> Photos</h2>
 
 <% if @photos.blank? %>
   <p>No photos to display.</p>
@@ -58,8 +58,8 @@
     <tbody>
       <% @photos.each do |photo| %>
         <tr>
-          <td><%= image_tag photo.image.url, alt: photo.caption, width: 100, height: 100 if photo.image.present? %></td>
-          <td><%= photo.owner.username %></td>
+          <td><%= image_tag photo.image.url, alt: photo.caption, width: 100, height: 100 %></td>
+          <td><%= link_to photo.owner.username, user_path(photo.owner) %></td>
           <td><%= photo.caption %></td>
           <td><%= time_ago_in_words(photo.created_at) %> ago</td>
           <td><%= photo.likes.count %></td>

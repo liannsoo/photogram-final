@@ -7,8 +7,6 @@ Rails.application.routes.draw do
   post '/follow_requests/follow', to: 'follow_requests#create', as: :follow_follow_requests
   delete '/follow_requests/unfollow/:id', to: 'follow_requests#destroy', as: :unfollow_follow_requests
   delete '/follow_requests/cancel/:id', to: 'follow_requests#cancel', as: :cancel_request_follow_requests
-
-  # Add routes for accepting and rejecting follow requests
   patch '/follow_requests/:id/accept', to: 'follow_requests#accept', as: :accept_follow_request
   delete '/follow_requests/:id/reject', to: 'follow_requests#reject', as: :reject_follow_request
 
@@ -23,9 +21,6 @@ Rails.application.routes.draw do
   # Resource routes for Users
   resources :users, only: [:index, :show] do
     member do
-      get 'liked_photos', to: 'photos#liked_photos'
-      get 'feed', to: 'photos#feed'
-      get 'discover', to: 'photos#discover'
       post 'follow', to: 'follow_requests#create'
       delete 'unfollow', to: 'follow_requests#destroy'
       delete 'cancel_follow', to: 'follow_requests#cancel'

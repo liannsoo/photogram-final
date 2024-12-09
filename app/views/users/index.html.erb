@@ -19,20 +19,21 @@
         <td><%= link_to 'Show details', user_path(user), class: "btn btn-secondary" %></td>
         <% if user_signed_in? %>
           <td>
-            <% if current_user != user %>
+            <% if current_user == user %>
+              <!-- Redirect to their profile without a follow action -->
+              <%= button_to 'Go to Your Profile', user_path(user), method: :get, class: 'btn btn-primary' %>
+            <% else %>
               <% case @follow_statuses[user.id] %>
               <% when 'accepted' %>
-                <%= link_to 'Unfollow', unfollow_follow_requests_path(id: user.id), method: :delete, class: 'btn btn-danger', data: { turbo: false } %>
+                <%= link_to 'Unfollow', unfollow_user_path(user), method: :delete, class: 'btn btn-danger', data: { turbo: false } %>
               <% when 'pending' %>
                 <div>
                   Request sent.
-                  <%= link_to 'Cancel', cancel_request_follow_requests_path(id: user.id), method: :delete, class: 'btn btn-link', data: { turbo: false } %>
+                  <%= link_to 'Cancel', cancel_follow_user_path(user), method: :delete, class: 'btn btn-warning', data: { turbo: false } %>
                 </div>
               <% else %>
-                <%= button_to 'Follow', e(follow_request: { recipient_id: user.id }), method: :post, class: 'btn btn-primary' %>
+                <%= button_to 'Follow', follow_user_path(user), method: :post, class: 'btn btn-primary' %>
               <% end %>
-            <% else %>
-              <%= button_to 'Follow', user_path(user), method: :post, class: 'btn btn-primary' %>
             <% end %>
           </td>
         <% end %>

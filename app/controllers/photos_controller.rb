@@ -7,6 +7,8 @@ class PhotosController < ApplicationController
   end
 
   def show
+    @photo = Photo.find(params[:id])
+    @comments = @photo.comments.includes(:user)
     @user = User.find(params[:id])
     @show_section = params[:show_section] || 'own'
     
