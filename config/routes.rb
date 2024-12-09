@@ -25,6 +25,10 @@ Rails.application.routes.draw do
       post 'follow', to: 'follow_requests#create'
       delete 'unfollow', to: 'follow_requests#destroy'
       delete 'cancel_follow', to: 'follow_requests#cancel'
+      get 'feed', to: 'users#show', defaults: { show_section: 'feed' }
+      get 'liked_photos', to: 'users#show', defaults: { show_section: 'liked_photos' }
+      get 'discover', to: 'users#show', defaults: { show_section: 'discover' }
+      get 'own', to: 'users#show', defaults: { show_section: 'own' }
     end
   end
 

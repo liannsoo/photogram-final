@@ -1,7 +1,7 @@
 <h1><%= @user.username %></h1>
 
 <div class="user-info">
-  <p><strong>Private:</strong> <%= @user.private ? 'Yes' : 'No' %></p>
+  <p><strong>Private:</strong> <%= @user.private ? 'true' : 'false' %></p>
   <p><strong>Followers:</strong> <%= @user.received_follow_requests.where(status: 'accepted').count %></p>
   <p><strong>Following:</strong> <%= @user.sent_follow_requests.where(status: 'accepted').count %></p>
 
@@ -23,7 +23,7 @@
     <% when 'pending' %>
       <%= link_to 'Cancel Request', cancel_request_follow_requests_path(id: @user.id), method: :delete, class: 'btn btn-warning' %>
     <% else %>
-      <%= link_to 'Follow', follow_follow_requests_path(follow_request: { recipient_id: @user.id }), method: :post, class: 'btn btn-primary' %>
+      <%= button_to 'Follow', follow_follow_requests_path(follow_request: { recipient_id: @user.id }), method: :post, class: 'btn btn-primary' %>
     <% end %>
   <% end %>
 </div>
@@ -31,10 +31,10 @@
 <hr>
 
 <ul>
-  <li><%= link_to 'Profile', user_path(@user) %></li>
-  <li><%= link_to 'Liked Photos', user_path(@user, show_section: 'liked_photos') %></li>
-  <li><%= link_to 'Feed', user_path(@user, show_section: 'feed') %></li>
-  <li><%= link_to 'Discover', user_path(@user, show_section: 'discover') %></li>
+  <li><%= link_to 'Profile', own_user_path(@user) %></li>
+  <li><%= link_to 'Liked Photos', liked_photos_user_path(@user) %></li>
+  <li><%= link_to 'Feed', feed_user_path(@user) %></li>
+  <li><%= link_to 'Discover', discover_user_path(@user) %></li>
 </ul>
 
 <hr>

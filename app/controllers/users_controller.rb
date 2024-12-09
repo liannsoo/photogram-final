@@ -25,7 +25,7 @@ class UsersController < ApplicationController
     return
   end
 
-  if @user.private? && user_signed_in? && !current_user.received_follow_requests.where(sender_id: @user.id, status: 'accepted').exists?
+  if @user.private? && user_signed_in? && !@user.received_follow_requests.where(sender: current_user, status: 'accepted').exists?
     redirect_to root_path, alert: "You do not have permission to view this user's profile."
     return
   end
@@ -46,7 +46,7 @@ class UsersController < ApplicationController
               @user.liked_photos
             when 'discover'
               followed_users_ids = @user.following.pluck(:id)
-              Photo.joins(:likes).where(likes: { owner_id: followed_users_ids }).distinct
+              Photo.joins(:likes).where(likes: { user_id: followed_users_ids }).distinct
             else
               @user.photos
             end
