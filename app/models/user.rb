@@ -32,5 +32,6 @@ class User < ApplicationRecord
   has_many :received_follow_requests, class_name: "FollowRequest", foreign_key: "recipient_id", dependent: :destroy
   has_many :following, -> { where(follow_requests: { status: 'accepted' }) }, through: :sent_follow_requests, source: :recipient
   has_many :liked_photos, through: :likes, source: :photo
+  has_many :followers, -> { where(follow_requests: { status: 'accepted' }) }, through: :received_follow_requests, source: :sender
   validates :username, presence: true, uniqueness: true
 end

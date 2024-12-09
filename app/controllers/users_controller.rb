@@ -58,7 +58,7 @@ class UsersController < ApplicationController
     @user = User.find_by(id: params[:id])
     if @user.nil?
       redirect_to root_path, alert: "User not found."
-      false # Return false to halt the callback chain
+      false
     end
   end
 end
