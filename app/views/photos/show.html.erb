@@ -5,13 +5,15 @@
 </head>
 <body>
   <div class="photo-details">
-    <% if @photo.image.present? %>
-      <%= image_tag(@photo.image, alt: @photo.caption) %>
+    <% if @photo.image? %>
+      <%= image_tag(@photo.image.url) %>
+    <% else %>
+      <p>No image available.</p>
     <% end %>
 
     <dl>
       <dt>Caption</dt>
-      <dd><%= @photo.caption %></dd>
+      <dd><%= @photo.caption || 'No caption provided' %></dd>
 
       <dt>Owner</dt>
       <dd><%= link_to @photo.owner.username, user_path(@photo.owner) %></dd>
@@ -38,7 +40,21 @@
       <% end %>
       
       <% if @photo.owner == current_user %>
-        <%= link_to 'Edit photo', edit_photo_path(@photo), class: "btn btn-info" %>
+        <h3>Edit Photo</h3>
+        <%= form_with(model: @photo, local: true) do |form| %>
+          <div>
+            <%= form.label :image, 'Image URL' %>
+            <%= form.text_field :image_url, value: @photo.image.url %>
+          </div>
+          <div>
+            <%= form.label :caption, 'Caption' %>
+            <%= form.text_field :caption %>
+          </div>
+          <div>
+            <%= form.submit 'Update Photo', class: "btn btn-info" %>
+          </div>
+        <% end %>
+
         <%= link_to 'Delete this photo', photo_path(@photo), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger" %>
       <% end %>
     <% end %>

@@ -27,14 +27,23 @@
     <% @photos.each do |photo| %>
       <tr>
         <td>
-          <%= image_tag(photo.image.url, alt: photo.caption) if photo.image.present? %>
+          <% if photo.image.present? %>
+            <%= image_tag(photo.image.url, alt: photo.caption || "No caption") if photo.image.url.present? %>
+          <% else %>
+            <span>No Image Available</span>
+          <% end %>
         </td>
-        <td><%= photo.caption %></td>
-        <td><%= link_to photo.owner.username, user_path(photo.owner) %></td>
+        <td><%= photo.caption || 'No caption provided' %></td>
+        <td>
+          <% if photo.owner %>
+            <%= link_to photo.owner.username, user_path(photo.owner) %>
+          <% else %>
+            <span>Unknown Owner</span>
+          <% end %>
+        </td>
         <td><%= time_ago_in_words(photo.created_at) %> ago</td>
         <td><%= photo.likes.count %></td>
-        <td><%= link_to 'Show details', photo_path(photo), class: "btn btn-primary" %>
-      </td>
+        <td><%= link_to 'Show details', photo_path(photo), class: "btn btn-primary" %></td>
       </tr>
     <% end %>
   </tbody>

@@ -11,11 +11,12 @@ Rails.application.routes.draw do
   delete '/follow_requests/:id/reject', to: 'follow_requests#reject', as: :reject_follow_request
 
   # Routes for the Photo resource with nested routes for comments
-  resources :photos, only: [:index, :show, :create, :update, :destroy] do
+  resources :photos, only: [:index, :show, :create, :update, :edit, :destroy] do
     member do
       post :like
       delete :unlike
     end
+    resources :comments, only: [:create, :destroy]
   end
 
   # Resource routes for Users
