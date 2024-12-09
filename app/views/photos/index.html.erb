@@ -12,39 +12,41 @@
   <% end %>
 <% end %>
 
-<table class="table photo-grid" border="1">
-  <thead>
-    <tr>
-      <th>Image</th>
-      <th>Caption</th>
-      <th>Owner</th>
-      <th>Posted</th>
-      <th>Likes</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @photos.each do |photo| %>
+<% if @photos.blank? %>
+  <p>No photos to display.</p>
+<% else %>
+  <table border="1">
+    <thead>
       <tr>
-        <td>
-          <% if photo.image.present? %>
-            <%= image_tag(photo.image.url, alt: photo.caption || "No caption") if photo.image.url.present? %>
-          <% else %>
-            <span>No Image Available</span>
-          <% end %>
-        </td>
-        <td><%= photo.caption || 'No caption provided' %></td>
-        <td>
-          <% if photo.owner %>
-            <%= link_to photo.owner.username, user_path(photo.owner) %>
-          <% else %>
-            <span>Unknown Owner</span>
-          <% end %>
-        </td>
-        <td><%= time_ago_in_words(photo.created_at) %> ago</td>
-        <td><%= photo.likes.count %></td>
-        <td><%= link_to 'Show details', photo_path(photo), class: "btn btn-primary" %></td>
+        <th>Image</th>
+        <th>Owner</th>
+        <th>Caption</th>
+        <th>Posted</th>
+        <th>Likes</th>
+        <th>Actions</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @photos.each do |photo| %>
+        <% if photo %>
+          <tr>
+            <td>
+              <%= image_tag(photo.image.url || "no_image_available.png", width: 100, height: 100) %>
+            </td>
+            <td>
+              <%= link_to(photo.owner&.username || "Unknown Owner", user_path(photo.owner || "#")) %>
+            </td>
+            <td><%= photo.caption || "No caption provided" %></td>
+            <td><%= time_ago_in_words(photo.created_at) %> ago</td>
+            <td><%= photo.likes.count %></td>
+            <td>
+              <%= link_to 'Show details', photo_path(photo), class: 'btn btn-secondary' %>
+            </td>
+          </tr>
+        <% else %>
+          <tr><td colspan="6">Invalid photo entry detected.</td></tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

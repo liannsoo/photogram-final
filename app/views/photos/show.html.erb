@@ -16,19 +16,19 @@
       <dd><%= @photo.caption || 'No caption provided' %></dd>
 
       <dt>Owner</dt>
-      <dd><%= @photo.owner.username%></dd>
+      <dd><%= @photo.owner&.username || 'Unknown' %></dd>
 
       <dt>Posted</dt>
-      <dd><%= time_ago_in_words(@photo.created_at) %> ago</dd>
+      <dd><%= @photo.created_at ? time_ago_in_words(@photo.created_at) + ' ago' : 'Unknown time' %></dd>
 
       <dt>Likes count</dt>
-      <dd><%= @photo.likes.count %></dd>
+      <dd><%= @photo.likes.count || 0 %></dd>
 
       <dt>Comments count</dt>
-      <dd><%= @photo.comments.count %></dd>
+      <dd><%= @photo.comments.count || 0 %></dd>
 
       <dt>Fans</dt>
-      <dd><%= @photo.fans.map(&:username).join(', ') %></dd>
+      <dd><%= @photo.fans.map(&:username).join(', ').presence || 'No fans yet' %></dd>
     </dl>
 
     <% if user_signed_in? %>
@@ -61,24 +61,30 @@
   </div>
 
   <h2>Comments</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Commenter</th>
-        <th>Comment</th>
-        <th>Posted</th>
-      </tr>
-    </thead>
-    <tbody>
+<table>
+  <thead>
+    <tr>
+      <th>Commenter</th>
+      <th>Comment</th>
+      <th>Posted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @photo.comments.present? %>
       <% @photo.comments.each do |comment| %>
         <tr>
-          <td><%= comment.author.username %></td>
-          <td><%= comment.body %></td>
-          <td><%= time_ago_in_words(comment.created_at) %> ago</td>
+          <td><%= comment.author&.username || 'Anonymous' %></td>
+          <td><%= comment.body.presence || 'No comment text provided' %></td>
+          <td><%= comment.created_at ? time_ago_in_words(comment.created_at) + ' ago' : 'Unknown time' %></td>
         </tr>
       <% end %>
-    </tbody>
-  </table>
+    <% else %>
+      <tr>
+        <td colspan="3">No comments available.</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
   <% if user_signed_in? %>
     <h3>Add a New Comment</h3>

@@ -8,8 +8,8 @@ class PhotosController < ApplicationController
 
   def show
     @photo = Photo.find(params[:id])
-    @comments = @photo.comments.includes(:user)
-    @user = User.find(params[:id])
+    @comments = @photo.comments.includes(:author)
+    @user = @photo.owner
     @show_section = params[:show_section] || 'own'
   end
 

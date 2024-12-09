@@ -9,15 +9,15 @@
 #  likes_count    :integer
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
-#  user_id        :bigint
+#  owner_id       :bigint
 #
 # Indexes
 #
-#  index_photos_on_user_id  (user_id)
+#  index_photos_on_owner_id  (owner_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (user_id => users.id)
+#  fk_rails_...  (owner_id => users.id)
 #
 class Photo < ApplicationRecord
   mount_uploader :image, ImageUploader

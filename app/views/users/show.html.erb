@@ -58,8 +58,8 @@
     <tbody>
       <% @photos.each do |photo| %>
         <tr>
-          <td><%= image_tag photo.image.url, alt: photo.caption, width: 100, height: 100 %></td>
-          <td><%= link_to photo.owner.username, user_path(photo.owner) %></td>
+          <td><%= image_tag photo.image.url, width: 100, height: 100 %></td>
+          <td><%= photo.owner&.username %></td>
           <td><%= photo.caption %></td>
           <td><%= time_ago_in_words(photo.created_at) %> ago</td>
           <td><%= photo.likes.count %></td>

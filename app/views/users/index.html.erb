@@ -20,13 +20,12 @@
         <% if user_signed_in? %>
           <td>
             <% if current_user == user %>
-              <!-- Redirect to their profile without a follow action -->
               <%= button_to 'Go to Your Profile', user_path(user), method: :get, class: 'btn btn-primary' %>
             <% else %>
-              <% case @follow_statuses[user.id] %>
-              <% when 'accepted' %>
+              <% follow_status = @follow_statuses[user.id] %>
+              <% if follow_status == 'accepted' %>
                 <%= link_to 'Unfollow', unfollow_user_path(user), method: :delete, class: 'btn btn-danger', data: { turbo: false } %>
-              <% when 'pending' %>
+              <% elsif follow_status == 'pending' %>
                 <div>
                   Request sent.
                   <%= link_to 'Cancel', cancel_follow_user_path(user), method: :delete, class: 'btn btn-warning', data: { turbo: false } %>
