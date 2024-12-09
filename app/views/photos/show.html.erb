@@ -16,7 +16,7 @@
       <dd><%= @photo.caption || 'No caption provided' %></dd>
 
       <dt>Owner</dt>
-      <dd><%= link_to @photo.owner.username, user_path(@photo.owner) %></dd>
+      <dd><%= @photo.owner.username%></dd>
 
       <dt>Posted</dt>
       <dd><%= time_ago_in_words(@photo.created_at) %> ago</dd>
@@ -34,7 +34,7 @@
     <% if user_signed_in? %>
       <h3>Actions</h3>
       <% if @photo.likes.exists?(fan_id: current_user.id) %>
-        <%= button_to 'Unlike', unlike_photo_path(@photo), method: :delete, class: "btn btn-warning" %>
+        <%= link_to 'Unlike', unlike_photo_path(@photo), method: :delete, class: "btn btn-warning" %>
       <% else %>
         <%= button_to 'Like', like_photo_path(@photo), method: :post, class: "btn btn-success" %>
       <% end %>

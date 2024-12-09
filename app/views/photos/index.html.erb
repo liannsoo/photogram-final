@@ -1,12 +1,12 @@
 <h1>List of Photos</h1>
 
 <% if user_signed_in? %>
-  <%= form_for :photo, url: photos_path, html: { multipart: true } do |f| %>
+  <%= form_with(model: Photo.new, local: true, html: { multipart: true }) do |f| %>
     <table>
       <tr>
         <td><%= f.label :image, 'Image' %><br><%= f.file_field :image %></td>
         <td><%= f.label :caption, 'Caption' %><br><%= f.text_field :caption, placeholder: 'Enter a caption for the photo' %></td>
-        <td><%= f.submit 'Add Photo' %></td>
+        <td><%= f.submit 'Add Photo', class: 'btn btn-primary' %></td>
       </tr>
     </table>
   <% end %>

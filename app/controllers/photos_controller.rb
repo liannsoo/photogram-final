@@ -43,7 +43,7 @@ class PhotosController < ApplicationController
   def like
     @photo = Photo.find(params[:id])
     new_like = @photo.likes.create(fan_id: current_user.id)
-    flash[:notice] = 'You liked this photo.'
+    flash[:notice] = 'Like created successfully.'
     redirect_to photo_path(@photo)
   end
   

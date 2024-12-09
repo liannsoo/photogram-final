@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_12_08_074230) do
+ActiveRecord::Schema[7.1].define(version: 2024_12_09_200222) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -76,14 +76,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_08_074230) do
   end
 
   create_table "photos", force: :cascade do |t|
-    t.bigint "user_id"
+    t.bigint "owner_id"
     t.text "caption"
     t.integer "likes_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "image"
     t.integer "comments_count", default: 0, null: false
-    t.index ["user_id"], name: "index_photos_on_user_id"
+    t.index ["owner_id"], name: "index_photos_on_owner_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -120,5 +120,5 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_08_074230) do
   add_foreign_key "likes", "photos"
   add_foreign_key "likes", "users"
   add_foreign_key "likes", "users", column: "fan_id"
-  add_foreign_key "photos", "users"
+  add_foreign_key "photos", "users", column: "owner_id"
 end

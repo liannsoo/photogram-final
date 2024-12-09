@@ -23,7 +23,7 @@ class Photo < ApplicationRecord
   mount_uploader :image, ImageUploader
   
   alias_attribute :owner_id, :user_id
-  belongs_to :owner, class_name: "User", foreign_key: "user_id"
+  belongs_to :owner, class_name: "User", foreign_key: "owner_id"
   has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :fans, through: :likes, source: :fan 
