@@ -1,0 +1,37 @@
+=> [[32m#<ActiveSupport::Logger:0x0000711c62682dc0[0m
+  @default_formatter[32m=[0m[32m#<Logger::Formatter:0x0000711c620a2f90[0m @datetime_format[32m=[0m[1;36mnil[0m[32m>[0m,
+  @formatter[32m=[0m
+   [32m#<ActiveSupport::Logger::SimpleFormatter:0x0000711c620ef1b0[0m
+    @datetime_format[32m=[0m[1;36mnil[0m,
+    @thread_key[32m=[0m[31m[1;31m"[0m[31mactivesupport_tagged_logging_tags:22200[1;31m"[0m[31m[0m[32m>[0m,
+  @level[32m=[0m[1;34m0[0m,
+  @level_override[32m=[0m{},
+  @local_level_key[32m=[0m[33m:logger_thread_safe_level_21800[0m,
+  @logdev[32m=[0m
+   [32m#<Logger::LogDevice:0x0000711c626844e0[0m
+    @binmode[32m=[0m[1;36mfalse[0m,
+    @dev[32m=[0m[32m#<File:/workspaces/photogram-final/log/development.log>[0m,
+    @filename[32m=[0m[31m[1;31m"[0m[31m/workspaces/photogram-final/log/development.log[1;31m"[0m[31m[0m,
+    @mon_data[32m=[0m[32m#<Monitor:0x0000711c620a2d10[0m[32m>[0m,
+    @mon_data_owner_object_id[32m=[0m[1;34m7720[0m,
+    @shift_age[32m=[0m[1;34m0[0m,
+    @shift_period_suffix[32m=[0m[31m[1;31m"[0m[31m%Y%m%d[1;31m"[0m[31m[0m,
+    @shift_size[32m=[0m[1;34m1048576[0m[32m>[0m,
+  @progname[32m=[0m[1;36mnil[0m[32m>[0m,
+ [32m#<ActiveSupport::Logger:0x0000711c624c5b90[0m
+  @default_formatter[32m=[0m[32m#<Logger::Formatter:0x0000711c61c741d0[0m @datetime_format[32m=[0m[1;36mnil[0m[32m>[0m,
+  @formatter[32m=[0m[32m#<ActiveSupport::Logger::SimpleFormatter:0x0000711c61c73f78[0m @datetime_format[32m=[0m[1;36mnil[0m[32m>[0m,
+  @level[32m=[0m[1;34m0[0m,
+  @level_override[32m=[0m{},
+  @local_level_key[32m=[0m[33m:logger_thread_safe_level_22220[0m,
+  @logdev[32m=[0m
+   [32m#<Logger::LogDevice:0x0000711c624c5b40[0m
+    @binmode[32m=[0m[1;36mfalse[0m,
+    @dev[32m=[0m[32m#<IO:<STDERR>>[0m,
+    @filename[32m=[0m[1;36mnil[0m,
+    @mon_data[32m=[0m[32m#<Monitor:0x0000711c61c740b8[0m[32m>[0m,
+    @mon_data_owner_object_id[32m=[0m[1;34m21780[0m,
+    @shift_age[32m=[0m[1;36mnil[0m,
+    @shift_period_suffix[32m=[0m[1;36mnil[0m,
+    @shift_size[32m=[0m[1;36mnil[0m[32m>[0m,
+  @progname[32m=[0m[1;36mnil[0m[32m>[0m]

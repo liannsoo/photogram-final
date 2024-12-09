@@ -2,6 +2,7 @@ class FollowRequestsController < ApplicationController
   before_action :set_recipient, only: [:destroy, :cancel]
 
   def create
+    Rails.logger.debug "Params received: #{params.inspect}"
     if params[:follow_request].blank? || params[:follow_request][:recipient_id].blank?
       redirect_back fallback_location: users_path, alert: "Invalid follow request."
       return

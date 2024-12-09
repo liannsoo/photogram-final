@@ -5,8 +5,7 @@ class UsersController < ApplicationController
   def index
     @users = User.all
     if user_signed_in?
-      @follow_requests = current_user.sent_follow_requests.includes(:recipient)
-      @follow_statuses = @follow_requests.map { |fr| [fr.recipient_id, fr.status] }.to_h
+      @follow_statuses = current_user.sent_follow_requests.pluck(:recipient_id, :status).to_h
     else
       @follow_statuses = {}
     end
@@ -33,8 +32,7 @@ class UsersController < ApplicationController
 
   # Fetch follow statuses if signed in
   if user_signed_in?
-    @follow_statuses = current_user.sent_follow_requests.includes(:recipient)
-                                   .map { |fr| [fr.recipient_id, fr.status] }.to_h
+    @follow_statuses = current_user.sent_follow_requests.pluck(:recipient_id, :status).to_h
   else
     @follow_statuses = {}
   end
