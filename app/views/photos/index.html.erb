@@ -6,7 +6,7 @@
     <%= form.file_field :image %>
     <%= form.label :caption, 'Caption' %>
     <%= form.text_field :caption %>
-    <%= form.submit 'Add Photo', class: "btn btn-info" %>
+    <button type="submit" class="btn btn-info">Add Photo</button>
 <% end %>
 
 <% if @photos.blank? %>

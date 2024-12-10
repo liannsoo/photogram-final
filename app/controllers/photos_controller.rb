@@ -53,7 +53,7 @@ class PhotosController < ApplicationController
   def unlike
     @photo = Photo.find(params[:id])
     @photo.likes.where(fan_id: current_user.id).destroy_all
-    flash[:alert] = 'You unliked this photo.'
+    flash[:alert] = 'Like deleted successfully.'
     redirect_to photo_path(@photo)
   end
 

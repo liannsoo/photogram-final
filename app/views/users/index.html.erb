@@ -31,8 +31,11 @@
                   <%= link_to 'Cancel', cancel_follow_user_path(user), method: :delete, class: 'btn btn-warning', data: { turbo: false } %>
                 </div>
               <% else %>
-                  <%= button_to 'Follow', follow_follow_requests_path(follow_request: { recipient_id: user.id }), method: :post, class: 'btn btn-primary' %>
-              <% end %>
+                  <%= form_with(url: follow_follow_requests_path, method: :post, local: true) do |form| %>
+                    <%= form.hidden_field :recipient_id, value: user.id %>
+                    <button type="submit" class="btn btn-primary">Follow</button>
+                  <% end %>
+                <% end %>
             <% end %>
           </td>
         <% end %>
