@@ -3,7 +3,7 @@ class PhotosController < ApplicationController
   skip_before_action(:authenticate_user!, { :only => [:index] })
 
   def index
-    @photos = Photo.all
+    @photos = Photo.joins(:owner).where(users: { private: false })
   end
 
   def show
@@ -12,7 +12,6 @@ class PhotosController < ApplicationController
       redirect_to photos_path, alert: 'Photo not found.'
       return
     end
-
     @comments = @photo.comments.includes(:author)
     @user = @photo.owner
     @show_section = params[:show_section] || 'own'
@@ -21,9 +20,10 @@ class PhotosController < ApplicationController
   def create
     @photo = current_user.photos.build(photo_params)
     if @photo.save
-      redirect_to photos_path, notice: 'Photo added successfully.'
+      redirect_to photos_path, notice: 'Photo created successfully.'
     else
-      render :new, alert: 'Failed to add photo.'
+      @photos = Photo.all
+      render :index, alert: 'Failed to add photo.'
     end
   end
 
