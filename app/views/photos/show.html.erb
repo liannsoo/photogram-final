@@ -13,22 +13,22 @@
 
     <dl>
       <dt>Caption</dt>
-      <dd><%= @photo.caption || 'No caption provided' %></dd>
+      <dd><%= @photo&.caption || 'No caption provided' %></dd>
 
       <dt>Owner</dt>
-      <dd><%= @photo.owner&.username || 'Unknown' %></dd>
+      <dd><%= @photo&.owner&.username || 'Unknown' %></dd>
 
       <dt>Posted</dt>
-      <dd><%= @photo.created_at ? time_ago_in_words(@photo.created_at) + ' ago' : 'Unknown time' %></dd>
+      <dd><%= @photo&.created_at ? time_ago_in_words(@photo.created_at) + ' ago' : 'Unknown time' %></dd>
 
       <dt>Likes count</dt>
-      <dd><%= @photo.likes.count || 0 %></dd>
+      <dd><%= @photo&.likes.count || 0 %></dd>
 
       <dt>Comments count</dt>
-      <dd><%= @photo.comments.count || 0 %></dd>
+      <dd><%= @photo&.comments.count || 0 %></dd>
 
       <dt>Fans</dt>
-      <dd><%= @photo.fans.map(&:username).join(', ').presence || 'No fans yet' %></dd>
+      <dd><%= @photo&.fans&.map(&:username)&.join(', ').presence || 'No fans yet' %></dd>
     </dl>
 
     <% if user_signed_in? %>
@@ -39,9 +39,9 @@
         <%= button_to 'Like', like_photo_path(@photo), method: :post, class: "btn btn-success" %>
       <% end %>
       
-      <% if @photo.owner == current_user %>
+      <% if @photo&.owner == current_user %>
         <h3>Edit Photo</h3>
-        <%= form_with(model: Photo.new, local: true, html: { multipart: true }) do |f| %>
+        <%= form_with(model: @photo, local: true do |form| %>
           <div>
             <%= form.label :image, 'Image URL' %>
             <%= form.text_field :image_url, value: @photo.image.url %>
@@ -70,7 +70,7 @@
     </tr>
   </thead>
   <tbody>
-    <% if @photo.comments.present? %>
+    <% if @photo&.comments.present? %>
       <% @photo.comments.each do |comment| %>
         <tr>
           <td><%= comment.author&.username || 'Anonymous' %></td>
@@ -88,7 +88,7 @@
 
   <% if user_signed_in? %>
     <h3>Add a New Comment</h3>
-    <%= form_with(model: Photo.new, local: true, html: { multipart: true }) do |f| %>
+    <%= form_with(model: [@photo, Comment.new], local: true) do |form| %>
       <div>
         <%= form.label :body, "Comment" %>
         <%= form.text_area :body, placeholder: "Enter your comment" %>
