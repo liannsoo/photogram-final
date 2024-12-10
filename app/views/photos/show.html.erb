@@ -33,7 +33,7 @@
 
     <% if user_signed_in? %>
       <h3>Actions</h3>
-      <% if @photo.likes.exists?(fan_id: current_user.id) %>
+      <% if @photo&.likes.exists?(fan_id: current_user.id) %>
         <%= link_to 'Unlike', unlike_photo_path(@photo), method: :delete, class: "btn btn-warning" %>
       <% else %>
         <%= button_to 'Like', like_photo_path(@photo), method: :post, class: "btn btn-success" %>
@@ -41,7 +41,7 @@
       
       <% if @photo&.owner == current_user %>
         <h3>Edit Photo</h3>
-        <%= form_with(model: @photo, local: true do |form| %>
+        <%= form_with(model: @photo, local: true) do |form| %>
           <div>
             <%= form.label :image, 'Image URL' %>
             <%= form.text_field :image_url, value: @photo.image.url %>
