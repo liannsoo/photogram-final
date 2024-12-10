@@ -31,10 +31,10 @@
 <hr>
 
 <ul>
-  <li><%= link_to 'Profile', own_user_path(@user) %></li>
-  <li><%= link_to 'Liked Photos', liked_photos_user_path(@user) %></li>
-  <li><%= link_to 'Feed', feed_user_path(@user) %></li>
-  <li><%= link_to 'Discover', discover_user_path(@user) %></li>
+  <li><a href="<%= user_path(@user, show_section: 'own') %>">Profile</a></li>
+  <li><a href="<%= user_path(@user, show_section: 'liked_photos') %>">Liked photos</a></li>
+  <li><a href="<%= user_path(@user, show_section: 'feed') %>">Feed</a></li>
+  <li><a href="<%= user_path(@user, show_section: 'discover') %>">Discover</a></li>
 </ul>
 
 <hr>
@@ -63,7 +63,7 @@
           <td><%= photo.caption %></td>
           <td><%= time_ago_in_words(photo.created_at) %> ago</td>
           <td><%= photo.likes.count %></td>
-          <td><%= link_to 'Show details', photo_path(photo), class: 'btn btn-secondary' %></td>
+          <td><a href="<%= photo_path(photo) %>" class="btn btn-secondary">Show details</a></td>
         </tr>
       <% end %>
     </tbody>

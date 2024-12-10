@@ -43,7 +43,7 @@ class UsersController < ApplicationController
       @user.liked_photos
     when 'discover'
       followed_users_ids = @user.following.pluck(:id)
-      Photo.joins(:likes).where(likes: { user_id: followed_users_ids }).distinct if followed_users_ids.any?
+      Photo.joins(:likes).where(likes: { fan_id: followed_users_ids }).distinct if followed_users_ids.any?
     else
       @user.photos
     end || []
