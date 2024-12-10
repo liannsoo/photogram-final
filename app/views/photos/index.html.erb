@@ -1,15 +1,12 @@
 <h1>List of Photos</h1>
 
 <% if user_signed_in? %>
-  <%= form_with(model: Photo.new, local: true, html: { multipart: true }) do |f| %>
-    <table>
-      <tr>
-        <td><%= f.label :image, 'Image' %><br><%= f.file_field :image %></td>
-        <td><%= f.label :caption, 'Caption' %><br><%= f.text_field :caption, placeholder: 'Enter a caption for the photo' %></td>
-        <td><%= f.submit 'Add Photo', class: 'btn btn-primary' %></td>
-      </tr>
-    </table>
-  <% end %>
+  <%= form_with(model: Photo.new, local: true, html: { multipart: true }) do |form| %>
+    <%= form.label :image, 'Image' %>
+    <%= form.file_field :image %>
+    <%= form.label :caption, 'Caption' %>
+    <%= form.text_field :caption %>
+    <%= form.submit 'Add Photo', class: "btn btn-info" %>
 <% end %>
 
 <% if @photos.blank? %>
@@ -28,23 +25,20 @@
     </thead>
     <tbody>
       <% @photos.each do |photo| %>
-        <% if photo %>
-          <tr>
-            <td>
-              <%= image_tag(photo.image.url || "no_image_available.png", width: 100, height: 100) %>
-            </td>
-            <td>
-              <%= @photo.owner&.username || 'Unknown' %>
+        <tr>
+          <td>
+            <%= image_tag(photo.image? ? photo.image.url : "no_image_available.png", width: 100, height: 100) %>
+          </td>
+          <td>
+            <%= photo.owner&.username || 'Unknown' %>
             </td>
             <td><%= photo.caption || "No caption provided" %></td>
-            <td><%= time_ago_in_words(photo.created_at) %> ago</td>
+            <td><%= photo.created_at ? time_ago_in_words(photo.created_at) + ' ago' : 'Unknown time' %></td>
             <td><%= photo.likes.count %></td>
             <td>
               <%= link_to 'Show details', photo_path(photo), class: 'btn btn-secondary' %>
             </td>
           </tr>
-        <% else %>
-          <tr><td colspan="6">Invalid photo entry detected.</td></tr>
         <% end %>
       <% end %>
     </tbody>

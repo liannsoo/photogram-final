@@ -19,10 +19,10 @@
 #  fk_rails_...  (photo_id => photos.id)
 #
 class Like < ApplicationRecord
-  belongs_to :user, class_name: "User", foreign_key: "user"
+  belongs_to :fan, class_name: "User", foreign_key: "fan_id"
   belongs_to :photo
 
-  validates :user, presence: true
+  validates :fan, presence: true
   validates :photo, presence: true
 
   validates :photo_id, uniqueness: { scope: :fan_id }

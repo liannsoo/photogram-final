@@ -41,7 +41,7 @@
       
       <% if @photo.owner == current_user %>
         <h3>Edit Photo</h3>
-        <%= form_with(model: @photo, local: true) do |form| %>
+        <%= form_with(model: Photo.new, local: true, html: { multipart: true }) do |f| %>
           <div>
             <%= form.label :image, 'Image URL' %>
             <%= form.text_field :image_url, value: @photo.image.url %>
@@ -88,7 +88,7 @@
 
   <% if user_signed_in? %>
     <h3>Add a New Comment</h3>
-    <%= form_with(model: [@photo, Comment.new], local: true) do |form| %>
+    <%= form_with(model: Photo.new, local: true, html: { multipart: true }) do |f| %>
       <div>
         <%= form.label :body, "Comment" %>
         <%= form.text_area :body, placeholder: "Enter your comment" %>

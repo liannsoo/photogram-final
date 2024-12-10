@@ -7,7 +7,12 @@ class PhotosController < ApplicationController
   end
 
   def show
-    @photo = Photo.find(params[:id])
+    @photo = Photo.find_by(id: params[:id])
+    if @photo.nil?
+      redirect_to photos_path, alert: 'Photo not found.'
+      return
+    end
+
     @comments = @photo.comments.includes(:author)
     @user = @photo.owner
     @show_section = params[:show_section] || 'own'
@@ -16,11 +21,9 @@ class PhotosController < ApplicationController
   def create
     @photo = current_user.photos.build(photo_params)
     if @photo.save
-      flash[:notice] = 'Photo added successfully.'
-      redirect_to photos_path
+      redirect_to photos_path, notice: 'Photo added successfully.'
     else
-      flash[:alert] = 'Failed to add photo.'
-      render :new
+      render :new, alert: 'Failed to add photo.'
     end
   end
 
