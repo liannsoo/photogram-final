@@ -39,7 +39,7 @@
 
 <hr>
 
-<h2><%= @show_section.capitalize %> Photos (<%= @photos.count %>)</h2>
+<h2><%= @show_section.capitalize %> Photos (<%= @photos&.count || 0 %>)</h2>
 
 <% if @photos.blank? %>
   <p>No photos to display.</p>

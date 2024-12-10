@@ -34,7 +34,7 @@
               <%= image_tag(photo.image.url || "no_image_available.png", width: 100, height: 100) %>
             </td>
             <td>
-              <%= link_to(photo.owner&.username || "Unknown Owner", user_path(photo.owner || "#")) %>
+              <%= photo.owner&.username %>
             </td>
             <td><%= photo.caption || "No caption provided" %></td>
             <td><%= time_ago_in_words(photo.created_at) %> ago</td>
