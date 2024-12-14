@@ -3,9 +3,17 @@ class PhotosController < ApplicationController
   skip_before_action(:authenticate_user!, { :only => [:index] })
 
   def index
-    @photos = Photo.joins(:owner).where(users: { private: false })
+    if user_signed_in?
+      # Fetch all public photos + photos from followed users
+      public_photos = Photo.joins(:owner).where(users: { private: false })
+      followed_photos = Photo.where(owner_id: current_user.following.pluck(:id))
+      @photos = public_photos.or(followed_photos).distinct
+    else
+      # Only show public photos for non-signed-in users
+      @photos = Photo.joins(:owner).where(users: { private: false })
+    end
   end
-
+  
   def show
     @photo = Photo.find_by(id: params[:id])
     if @photo.nil?
