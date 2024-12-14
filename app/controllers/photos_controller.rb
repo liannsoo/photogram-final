@@ -4,13 +4,15 @@ class PhotosController < ApplicationController
 
   def index
     if user_signed_in?
-      # Fetch all public photos + photos from followed users
-      public_photos = Photo.joins(:owner).where(users: { private: false })
-      followed_photos = Photo.where(owner_id: current_user.following.pluck(:id))
-      @photos = public_photos.or(followed_photos).distinct
+      # Show all public photos + photos from users the current user follows
+      public_user_ids = User.where(private: false).pluck(:id)
+      followed_user_ids = current_user.following.pluck(:id)
+      visible_user_ids = (public_user_ids + followed_user_ids).uniq
+      @photos = Photo.where(owner_id: visible_user_ids).order(created_at: :desc)
     else
-      # Only show public photos for non-signed-in users
-      @photos = Photo.joins(:owner).where(users: { private: false })
+      # Show only public photos for non-signed-in users
+      public_user_ids = User.where(private: false).pluck(:id)
+      @photos = Photo.where(owner_id: public_user_ids).order(created_at: :desc)
     end
   end
   

@@ -22,13 +22,15 @@ Rails.application.routes.draw do
   # Resource routes for Users
   resources :users, only: [:index, :show] do
     member do
-      post 'follow', to: 'follow_requests#create'
-      delete 'unfollow', to: 'follow_requests#destroy'
-      delete 'cancel_follow', to: 'follow_requests#cancel'
-      get 'feed', to: 'users#show', defaults: { show_section: 'feed' }
-      get 'liked_photos', to: 'users#show', defaults: { show_section: 'liked_photos' }
-      get 'discover', to: 'users#show', defaults: { show_section: 'discover' }
-      get 'own', to: 'users#show', defaults: { show_section: 'own' }
+      scope :follow_requests do
+        post 'create', to: 'follow_requests#create', as: :follow
+        delete 'destroy', to: 'follow_requests#destroy', as: :unfollow
+        delete 'cancel', to: 'follow_requests#cancel', as: :cancel_follow
+      end
+      get 'feed', to: 'users#show', defaults: { show_section: 'feed' }, as: :feed
+      get 'liked_photos', to: 'users#show', defaults: { show_section: 'liked_photos' }, as: :liked_photos
+      get 'discover', to: 'users#show', defaults: { show_section: 'discover' }, as: :discover
+      get 'own', to: 'users#show', defaults: { show_section: 'own' }, as: :own
     end
   end
 

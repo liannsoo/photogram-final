@@ -36,7 +36,11 @@
             <td><%= photo.created_at ? time_ago_in_words(photo.created_at) + ' ago' : 'Unknown time' %></td>
             <td><%= photo.likes.count %></td>
             <td>
-              <%= link_to 'Show details', photo_path(photo), class: 'btn btn-secondary' %>
+              <% if user_signed_in? %>
+                <a href="<%= photo_path(photo) %>" class="btn btn-secondary">Show details</a>
+              <% else %>
+                <a href="<%= new_user_session_path %>" class="btn btn-secondary" data-alert="You must be signed in to view photo details">Sign in to view</a>
+              <% end %>
             </td>
           </tr>
         <% end %>
